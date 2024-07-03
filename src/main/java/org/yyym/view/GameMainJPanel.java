@@ -9,18 +9,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class GameMainJPanel extends JPanel {
+public class GameMainJPanel extends JPanel implements Runnable{
     private ElementManager em;
 
     public GameMainJPanel() {
         this.mainJPanelInit();
-        this.load();
     }
-    public void load() {
-        ImageIcon icon=new ImageIcon("src/main/resources/static/img.png");
-        ElementObj obj = new Player(100,100,50,50,icon);//实例化对象
-        em.addExtraEMData(GameElement.PLAYER, obj);
-    }
+
     public void mainJPanelInit() {
         this.em = ElementManager.getEM();
     }
@@ -29,11 +24,21 @@ public class GameMainJPanel extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
-        for(GameElement ele : em.getEMData().keySet()) {
+        for(GameElement ele : GameElement.values()) {
             List<ElementObj> objList = em.getExtraEMData(ele);
             for (ElementObj elementObj : objList) {
                 elementObj.show(g);
             }
+        }
+    }
+
+    @Override
+    public void run() {
+        while ( true ) {
+            this.repaint();
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException ignored) {}
         }
     }
 }

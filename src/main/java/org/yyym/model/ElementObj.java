@@ -3,6 +3,7 @@ package org.yyym.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.yyym.controller.action.KeyboardAction;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,5 +22,8 @@ public abstract class ElementObj {
     private int height;
     private ImageIcon icon;
     public abstract void show(Graphics g);
+    public synchronized void handleKeyboardAction(Boolean clicking,KeyboardAction action) {}
+    public synchronized void elementMove() {}
+    public synchronized void modelHandler() {}
 
 }

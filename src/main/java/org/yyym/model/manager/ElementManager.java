@@ -43,9 +43,7 @@ public class ElementManager {
      * @tip 将来可能出现的功能扩展, 可以重写此方法实现, 本方法主要是初始化List
      */
     public void initEM() {
-        this.EMData.put(GameElement.PLAYER, new ArrayList<>());
-        this.EMData.put(GameElement.BARRIER, new ArrayList<>());
-        this.EMData.put(GameElement.BOMB, new ArrayList<>());
-        this.EMData.put(GameElement.Destructible1, new ArrayList<>());
+        for (GameElement ele : GameElement.values())
+            EMData.put(ele, new ArrayList<>());
     }
 }

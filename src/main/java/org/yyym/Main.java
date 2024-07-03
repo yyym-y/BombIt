@@ -1,5 +1,7 @@
 package org.yyym;
 
+import org.yyym.controller.GameKeyListener;
+import org.yyym.controller.GameMainThread;
 import org.yyym.model.manager.GameElement;
 import org.yyym.view.GameJFrame;
 import org.yyym.view.GameMainJPanel;
@@ -11,10 +13,9 @@ import java.util.Iterator;
 public class Main {
     public static void main(String[] args) {
         GameJFrame gj = new GameJFrame();
-        GameMainJPanel jp = new GameMainJPanel();
-
-        gj.setJPanel(jp);
-        gj.setKeyListener(null);
+        gj.setJPanel(new GameMainJPanel());
+        gj.setKeyListener(new GameKeyListener());
+        gj.setThread(new GameMainThread());
         gj.start();
     }
 }

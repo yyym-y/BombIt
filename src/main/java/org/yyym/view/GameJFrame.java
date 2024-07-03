@@ -31,5 +31,7 @@ public class GameJFrame extends JFrame {
         if(keyListener != null) this.addKeyListener(keyListener);
         if(thread != null) thread.start();
         this.setVisible(true);
+        if(this.jPanel instanceof Runnable)
+            new Thread((Runnable)this.jPanel).start();
     }
 }
