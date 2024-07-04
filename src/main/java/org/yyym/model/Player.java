@@ -13,7 +13,7 @@ public class Player extends ElementObj implements Runnable{
     private KeyboardAction keyboardAction;
     private KeyboardAction lastAction;
 
-    private Map<KeyboardAction, List<ImageIcon>> moveCartoon = new HashMap<>();
+    private final Map<KeyboardAction, List<ImageIcon>> moveCartoon = new HashMap<>();
 
     public Player(int x, int y,
                   List<ImageIcon> l, List<ImageIcon> r, List<ImageIcon> t, List<ImageIcon> b) {
@@ -58,15 +58,15 @@ public class Player extends ElementObj implements Runnable{
         while (true) {
             try {
                 synchronized (new Object()) {
-                    System.out.println(" ");
+                    //System.out.println(keyboardAction + " " + lastAction + " " + pos);
                     if(keyboardAction == null) {
-                        if(pos != 0 && this.lastAction != null) {
+                        if(lastAction != null && ! this.getIcon().equals(moveCartoon.get(lastAction).get(0))) {
                             this.setIcon(moveCartoon.get(lastAction).get(0));
-                            pos = 0; Thread.sleep(150);
+                            pos = 0;
                         }
+                        Thread.sleep(100);
                         continue;
                     }
-//                    System.out.println("------~~~" + pos);
                     this.setIcon(moveCartoon.get(this.keyboardAction).get(pos));
                     pos ++; pos %= moveCartoon.get(this.keyboardAction).size();
                     Thread.sleep(100);
