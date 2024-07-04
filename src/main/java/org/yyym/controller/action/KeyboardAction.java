@@ -40,6 +40,6 @@ public enum KeyboardAction {
     }
 
     public abstract void effectMove(ElementObj ele);
-    public static final int MOVE_LEN = 10;
+    public static final int MOVE_LEN = 6;
 
 }

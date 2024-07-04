@@ -27,7 +27,7 @@ public class GameKeyListener implements KeyListener {
             for(ElementObj ele : em.getExtraEMData(GameElement.PLAYER)) {
                 ele.handleKeyboardAction(true, action);
             }
-        } catch (Exception ignored) {}
+        } catch (Exception ignore) {}
     }
 
     @Override
