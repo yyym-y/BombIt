@@ -1,6 +1,9 @@
 package org.yyym.model;
 
+import lombok.Getter;
 import org.yyym.controller.action.KeyboardAction;
+import org.yyym.model.manager.GameElement;
+import org.yyym.model.manager.GameLoader;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,16 +15,17 @@ public class Player extends ElementObj implements Runnable{
 
     private KeyboardAction keyboardAction;
     private KeyboardAction lastAction;
+    private final GameElement playerEle;
 
+    @Getter
     private final Map<KeyboardAction, List<ImageIcon>> moveCartoon = new HashMap<>();
 
-    public Player(int x, int y,
-                  List<ImageIcon> l, List<ImageIcon> r, List<ImageIcon> t, List<ImageIcon> b) {
-        super(x, y, b.get(0).getIconWidth(), b.get(0).getIconHeight(), b.get(0));
-        moveCartoon.put(KeyboardAction.TOP_W, t);
-        moveCartoon.put(KeyboardAction.BOTTOM_S, b);
-        moveCartoon.put(KeyboardAction.LEFT_A, l);
-        moveCartoon.put(KeyboardAction.RIGHT_D, r);
+    public Player(int x, int y, GameElement playerEle) throws Exception {
+        this.setX(x); this.setY(y); this.playerEle = playerEle;
+        GameLoader.loadPlayerSource(this, playerEle);
+        this.setIcon(moveCartoon.get(playerEle.actions().get(0)).get(0));
+        this.setHeight(this.getIcon().getIconHeight());
+        this.setWidth(this.getIcon().getIconWidth());
         new Thread(this).start();
     }
 
@@ -33,6 +37,7 @@ public class Player extends ElementObj implements Runnable{
 
    @Override
    public synchronized void handleKeyboardAction(Boolean clicking, KeyboardAction action) {
+        if(! playerEle.actions().contains(action)) return;
         if(!clicking && this.keyboardAction.equals(action)) {
             this.lastAction = this.keyboardAction;
             this.keyboardAction = null; return;

@@ -2,55 +2,44 @@ package org.yyym.model.manager;
 
 import lombok.Getter;
 import org.yyym.controller.action.KeyboardAction;
+import org.yyym.model.Player;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.io.InputStream;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 public class GameLoader {
-    @Getter
-    private static final GameLoader loader = new GameLoader();
-    private final Map<SingleSource, ImageIcon> singleSource = new HashMap<>();
-    private final Map<GroupSource, List<ImageIcon>> groupSource = new HashMap<>();
+    private static final Properties pro = new Properties();
 
-    GameLoader() {
-        for(GroupSource lg : GroupSource.values())
-            groupSource.put(lg, new ArrayList<>());
-        loadPlayerImg();
-    }
+    private static final String playerProPath = "src/main/java/org/yyym/PlayerProperties.pro";
 
-    private void loadPlayerImg() {
-        List<GroupSource> type = List.of(GroupSource.DEFAULT_PLAYER1_CARTOON_B,
-                GroupSource.DEFAULT_PLAYER1_CARTOON_L,
-                GroupSource.DEFAULT_PLAYER1_CARTOON_R,
-                GroupSource.DEFAULT_PLAYER1_CARTOON_T);
-        for(int i = 0 ; i < 4 ; i ++) {
-            for(int j = 0 ; j < 4 ; j ++) {
-                System.out.println(type.get(i));
-                groupSource.get(type.get(i))
-                        .add(readSmallImage("src/main/resources/static/player/Done_body16001_walk.png",
-                                25 + j * 100, 40 + 100 * i, 50, 60));
+    public static void loadPlayerSource(Player player, GameElement ele) throws Exception {
+        InputStream playerIni = new FileInputStream(new File(playerProPath));
+        pro.clear(); pro.load(playerIni);
+        Enumeration<?> names = pro.propertyNames();
+        String imgPath = "";
+        while (names.hasMoreElements()) {
+            String key = names.nextElement().toString();
+            if(key.equals(ele.toString())) {
+                imgPath = pro.getProperty(key); break;
             }
         }
-
+        for(int i = 0 ; i < 4 ; i ++) {
+            List<ImageIcon> icons = new ArrayList<>();
+            for(int j = 0 ; j < 4 ; j ++)
+                icons.add(readSmallImage(imgPath, 25 + j * 100, 40 + 100 * i, 50, 60));
+            player.getMoveCartoon().put(ele.actions().get(i), icons);
+        }
     }
 
-
-    public ImageIcon getExactSource_S(SingleSource type) {
-        return singleSource.get(type);
-    }
-    public List<ImageIcon> getExactSource_G(GroupSource type) {
-        return groupSource.get(type);
-    }
-
-    private ImageIcon readSmallImage(String path, int x, int y, int w, int h) {
+    private static ImageIcon readSmallImage(String path, int x, int y, int w, int h) {
         try {
             BufferedImage image = ImageIO.read(new File(path));
             BufferedImage subImage = image.getSubimage(x, y, w, h);

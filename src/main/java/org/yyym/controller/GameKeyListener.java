@@ -21,22 +21,23 @@ public class GameKeyListener implements KeyListener {
     public void keyPressed(KeyEvent e) {
         try {
             KeyboardAction action = KeyboardAction.toAction(e.getKeyCode());
-            if(actionSet.contains(action))
+            if (actionSet.contains(action))
                 return;
             actionSet.add(action);
-            for(ElementObj ele : em.getExtraEMData(GameElement.PLAYER)) {
-                ele.handleKeyboardAction(true, action);
+            for (GameElement g_ele : GameElement.getPlayer()) {
+                for (ElementObj ele : em.getExtraEMData(g_ele))
+                    ele.handleKeyboardAction(true, action);
             }
-        } catch (Exception ignore) {}
+        } catch (Exception ignored) {}
     }
-
     @Override
     public void keyReleased(KeyEvent e) {
         try {
             KeyboardAction action = KeyboardAction.toAction(e.getKeyCode());
             actionSet.remove(action);
-            for (ElementObj ele : em.getExtraEMData(GameElement.PLAYER)) {
-                ele.handleKeyboardAction(false, action);
+            for (GameElement g_ele : GameElement.getPlayer()) {
+                for (ElementObj ele : em.getExtraEMData(g_ele))
+                    ele.handleKeyboardAction(false, action);
             }
         } catch (Exception ignored) {}
     }

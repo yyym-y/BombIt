@@ -4,35 +4,27 @@ import org.yyym.model.ElementObj;
 import org.yyym.model.Player;
 import org.yyym.model.manager.ElementManager;
 import org.yyym.model.manager.GameElement;
-import org.yyym.model.manager.GameLoader;
-import org.yyym.model.manager.GroupSource;
-
-import javax.swing.*;
-import java.util.List;
-import java.util.Map;
 
 public class GameMainThread extends Thread {
     private final ElementManager em = ElementManager.getEM();
-    private final GameLoader loader = GameLoader.getLoader();
 
     @Override
     public void run() {
         while (true) {
-            loadGameSource();
-            gameRunning();
             try {
+                loadGameSource();
+                gameRunning();
                 sleep(50);
-            } catch (InterruptedException ignored) {}
+            } catch (InterruptedException ignored) {
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
-    void loadGameSource() {
-        Player player = new Player(5, 5,
-                loader.getExactSource_G(GroupSource.DEFAULT_PLAYER1_CARTOON_L),
-                loader.getExactSource_G(GroupSource.DEFAULT_PLAYER1_CARTOON_R),
-                loader.getExactSource_G(GroupSource.DEFAULT_PLAYER1_CARTOON_T),
-                loader.getExactSource_G(GroupSource.DEFAULT_PLAYER1_CARTOON_B));
-        em.addExtraEMData(GameElement.PLAYER, player);
+    void loadGameSource() throws Exception {
+        em.addExtraEMData(GameElement.PLAYER1, new Player(5, 5, GameElement.PLAYER1));
+        em.addExtraEMData(GameElement.PLAYER1, new Player(800, 500, GameElement.PLAYER2));
     }
 
     void gameRunning() {
